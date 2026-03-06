@@ -1,5 +1,9 @@
-<?php require_once 'includes/auth.php'; ?>
-<?php require_once 'includes/functions.php'; ?>
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+require_once 'includes/auth.php';
+require_once 'includes/functions.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +39,7 @@
                 <a href="stock.php"><i class="bi bi-box me-2"></i>Stock</a>
                 <a href="workers.php"><i class="bi bi-people me-2"></i>Workers</a>
                 <a href="billing.php"><i class="bi bi-receipt me-2"></i>Billing</a>
-                <a href="quotation.php"><i class="bi bi-file-text me-2"></i>Quotations</a>
+                <a href="quotations.php"><i class="bi bi-file-text me-2"></i>Quotations</a>
                 <a href="sites.php"><i class="bi bi-building me-2"></i>Sites</a>
                 <a href="purchases.php"><i class="bi bi-truck me-2"></i>Purchases</a>
                 <a href="yearly_salary.php"><i class="bi bi-cash-stack me-2"></i>Yearly Salary</a>

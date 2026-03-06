@@ -1,4 +1,8 @@
-<?php require_once 'includes/auth.php'; ?>
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+require_once 'includes/auth.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +25,7 @@
                 <a href="stock.php"><i class="bi bi-box me-2"></i>Stock</a>
                 <a href="workers.php"><i class="bi bi-people me-2"></i>Workers</a>
                 <a href="billing.php" class="active"><i class="bi bi-receipt me-2"></i>Billing</a>
-                <a href="quotation.php"><i class="bi bi-file-text me-2"></i>Quotations</a>
+                <a href="quotations.php"><i class="bi bi-file-text me-2"></i>Quotations</a>
                 <a href="sites.php"><i class="bi bi-building me-2"></i>Sites</a>
                 <a href="purchases.php"><i class="bi bi-truck me-2"></i>Purchases</a>
                 <a href="yearly_salary.php"><i class="bi bi-cash-stack me-2"></i>Yearly Salary</a>
@@ -39,7 +43,10 @@
                     <tbody>
                         <?php
                         $bills = $conn->query("SELECT b.*, c.name as customer_name FROM bills b LEFT JOIN customers c ON b.customer_id = c.id ORDER BY b.id DESC");
-                        while($bill = $bills->fetch_assoc()):
+                        if (!$bills) {
+                            echo "<tr><td colspan='5' class='text-danger'>Error: " . $conn->error . "</td></tr>";
+                        } else {
+                            while($bill = $bills->fetch_assoc()):
                         ?>
                         <tr>
                             <td><?php echo $bill['bill_no']; ?></td>
@@ -48,10 +55,12 @@
                             <td>₹<?php echo $bill['total']; ?></td>
                             <td>
                                 <a href="view_bill.php?id=<?php echo $bill['id']; ?>" class="btn btn-sm btn-info">View</a>
-                                <a href="download_bill_pdf.php?id=<?php echo $bill['id']; ?>" class="btn btn-sm btn-secondary">PDF</a>
                             </td>
                         </tr>
-                        <?php endwhile; ?>
+                        <?php 
+                            endwhile;
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>

@@ -16,20 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->begin_transaction();
     
     try {
-        // Insert or get customer
         $stmt = $conn->prepare("INSERT INTO customers (name, gst) VALUES (?, ?)");
         $stmt->bind_param("ss", $customer_name, $customer_gst);
         $stmt->execute();
         $customer_id = $conn->insert_id;
         
-        // Insert bill
-        $qr = "upi://pay?pa=yourupi@okhdfcbank&pn=Geeta%20Enterprises&am=$total&cu=INR"; // placeholder
+        $qr = "upi://pay?pa=yourupi@okhdfcbank&pn=Geeta%20Enterprises&am=$total&cu=INR";
         $stmt = $conn->prepare("INSERT INTO bills (bill_no, customer_id, customer_gst, subtotal, gst_amount, total, qr_code) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sisddds", $bill_no, $customer_id, $customer_gst, $subtotal, $gst, $total, $qr);
         $stmt->execute();
         $bill_id = $conn->insert_id;
         
-        // Insert items and update stock
         for ($i = 0; $i < count($stock_ids); $i++) {
             $stock_id = $stock_ids[$i];
             $qty = $qtys[$i];
@@ -40,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param("iiddd", $bill_id, $stock_id, $qty, $price, $item_total);
             $stmt->execute();
             
-            // Reduce stock
             $conn->query("UPDATE stock SET quantity = quantity - $qty WHERE id = $stock_id");
         }
         

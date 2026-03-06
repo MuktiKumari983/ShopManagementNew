@@ -7,7 +7,6 @@ if (!$worker) {
     exit();
 }
 
-// Handle advance payment
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_advance'])) {
     $amount = $_POST['amount'];
     $advance_date = $_POST['advance_date'];
@@ -17,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_advance'])) {
     $stmt->execute();
 }
 
-// Handle salary payment
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pay_salary'])) {
     $year = $_POST['year'];
     $month = $_POST['month'];
@@ -33,13 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pay_salary'])) {
     $stmt->execute();
 }
 
-// Get advances this month
 $month_start = date('Y-m-01');
 $month_end = date('Y-m-t');
 $advances = $conn->query("SELECT SUM(amount) as total FROM advances WHERE worker_id=$worker_id AND advance_date BETWEEN '$month_start' AND '$month_end'");
 $advance_total = $advances->fetch_assoc()['total'] ?? 0;
 
-// Get attendance this month
 $present = $conn->query("SELECT COUNT(*) as c FROM attendance WHERE worker_id=$worker_id AND status='Present' AND attendance_date BETWEEN '$month_start' AND '$month_end'")->fetch_assoc()['c'];
 $absent = date('t') - $present;
 $daily_wage = $worker['monthly_salary'] / date('t');

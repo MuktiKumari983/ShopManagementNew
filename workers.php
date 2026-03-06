@@ -1,4 +1,8 @@
-<?php require_once 'includes/auth.php'; ?>
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+require_once 'includes/auth.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +25,7 @@
                 <a href="stock.php"><i class="bi bi-box me-2"></i>Stock</a>
                 <a href="workers.php" class="active"><i class="bi bi-people me-2"></i>Workers</a>
                 <a href="billing.php"><i class="bi bi-receipt me-2"></i>Billing</a>
-                <a href="quotation.php"><i class="bi bi-file-text me-2"></i>Quotations</a>
+                <a href="quotations.php"><i class="bi bi-file-text me-2"></i>Quotations</a>
                 <a href="sites.php"><i class="bi bi-building me-2"></i>Sites</a>
                 <a href="purchases.php"><i class="bi bi-truck me-2"></i>Purchases</a>
                 <a href="yearly_salary.php"><i class="bi bi-cash-stack me-2"></i>Yearly Salary</a>
@@ -40,7 +44,10 @@
                     <tbody>
                         <?php
                         $workers = $conn->query("SELECT * FROM workers ORDER BY id DESC");
-                        while($w = $workers->fetch_assoc()):
+                        if (!$workers) {
+                            echo "<tr><td colspan='6' class='text-danger'>Error: " . $conn->error . "</td></tr>";
+                        } else {
+                            while($w = $workers->fetch_assoc()):
                         ?>
                         <tr>
                             <td><?php echo $w['id']; ?></td>
@@ -72,7 +79,10 @@
                                 </form>
                             </div>
                         </div>
-                        <?php endwhile; ?>
+                        <?php 
+                            endwhile;
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>

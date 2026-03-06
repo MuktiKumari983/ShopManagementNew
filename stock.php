@@ -1,4 +1,8 @@
-<?php require_once 'includes/auth.php'; ?>
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+require_once 'includes/auth.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +26,7 @@
                 <a href="stock.php" class="active"><i class="bi bi-box me-2"></i>Stock</a>
                 <a href="workers.php"><i class="bi bi-people me-2"></i>Workers</a>
                 <a href="billing.php"><i class="bi bi-receipt me-2"></i>Billing</a>
-                <a href="quotation.php"><i class="bi bi-file-text me-2"></i>Quotations</a>
+                <a href="quotations.php"><i class="bi bi-file-text me-2"></i>Quotations</a>
                 <a href="sites.php"><i class="bi bi-building me-2"></i>Sites</a>
                 <a href="purchases.php"><i class="bi bi-truck me-2"></i>Purchases</a>
                 <a href="yearly_salary.php"><i class="bi bi-cash-stack me-2"></i>Yearly Salary</a>
@@ -43,7 +47,10 @@
                     <tbody>
                         <?php
                         $result = $conn->query("SELECT s.*, c.name as category_name, c.unit FROM stock s JOIN categories c ON s.category_id = c.id ORDER BY s.id DESC");
-                        while($row = $result->fetch_assoc()):
+                        if (!$result) {
+                            echo "<tr><td colspan='10' class='text-danger'>Error: " . $conn->error . "</td></tr>";
+                        } else {
+                            while($row = $result->fetch_assoc()):
                         ?>
                         <tr>
                             <td><?php echo $row['id']; ?></td>
@@ -61,7 +68,10 @@
                                 <a href="delete_stock.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this item?')"><i class="bi bi-trash"></i></a>
                             </td>
                         </tr>
-                        <?php endwhile; ?>
+                        <?php 
+                            endwhile;
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>

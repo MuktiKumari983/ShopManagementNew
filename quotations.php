@@ -56,7 +56,7 @@ require_once 'includes/auth.php';
                             <td><?php echo $q['valid_till']; ?></td>
                             <td>₹<?php echo $q['total']; ?></td>
                             <td>
-                                <a href="view_quotations.php?id=<?php echo $q['id']; ?>" class="btn btn-sm btn-info">View</a>
+                                <a href="view_quotation.php?id=<?php echo $q['id']; ?>" class="btn btn-sm btn-info">View</a>
                                 <?php if (!$q['converted_to_bill']): ?>
                                 <a href="convert_to_bill.php?quote_id=<?php echo $q['id']; ?>" class="btn btn-sm btn-success" onclick="return confirm('Convert to bill? This will create a bill from this quotation.')">Convert to Bill</a>
                                 <?php else: ?>

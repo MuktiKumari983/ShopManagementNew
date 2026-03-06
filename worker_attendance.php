@@ -7,11 +7,9 @@ if (!$worker) {
     exit();
 }
 
-// Handle marking attendance
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mark_attendance'])) {
     $date = $_POST['attendance_date'];
     $status = $_POST['status'];
-    // Check if already marked
     $check = $conn->query("SELECT id FROM attendance WHERE worker_id=$worker_id AND attendance_date='$date'");
     if ($check->num_rows > 0) {
         $conn->query("UPDATE attendance SET status='$status' WHERE worker_id=$worker_id AND attendance_date='$date'");
@@ -21,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mark_attendance'])) {
     $_SESSION['success'] = "Attendance marked for $date";
 }
 
-// Get current month attendance
 $month = date('Y-m');
 $attendance = $conn->query("SELECT * FROM attendance WHERE worker_id=$worker_id AND DATE_FORMAT(attendance_date, '%Y-%m') = '$month' ORDER BY attendance_date DESC");
 ?>
